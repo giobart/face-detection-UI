@@ -11,7 +11,7 @@ def create_app(config=None, app_name='face-detection-UI'):
     Initializes the application and its utilities.
     """
 
-    app = Flask(app_name, template_folder=os.path.join('src', 'templates'))
+    app = Flask(app_name, template_folder=os.path.join('src', 'templates'), static_folder=os.path.join('src','static'))
     CORS(app)
 
     if config:
