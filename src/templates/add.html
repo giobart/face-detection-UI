@@ -16,29 +16,26 @@
   <body>
     <div class="container login-container">
             <div class="row">
-                <div class="col-md-6 login-form-1">
+                <div class="col-md-12 login-form-1">
                     <h3>Register new face</h3>
-                        <form action="/login" method="POST">
+                        <form action="/add" method="POST" enctype="multipart/form-data">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="ID" id="id" name="id" />
+                                <input type="file" id="file" name="file" accept="image/png, image/jpeg" style="color:#fff;">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Password" id="password" name="password"/>
+                                <input type="text" class="form-control" placeholder="Name" id="name" name="name" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Surname" id="surname" name="surname" />
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" placeholder="ID" id="id" name="id" />
                             </div>
                             <div class="form-group">
                                 <input type="submit" class="btnSubmit" value="Add Face" />
                             </div>
                         </form>
 
-                </div>
-                <div class="col-md-6 login-form-2">
-                    <div class="login-logo">
-                        <img src="static/face-logo.png" alt=""/>
-                    </div>
-                    <h3>Login with face</h3>
-                        <div class="login-image">
-                            <input type="image" value="Login" alt="Submit" src="static/face.png" />
-                        </div>
                 </div>
             </div>
     </div>
