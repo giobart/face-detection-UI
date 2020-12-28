@@ -1,2 +1,2 @@
 # face-detection-UI
-UI for who's that pokemon project
+web UI for whos that pokemon project

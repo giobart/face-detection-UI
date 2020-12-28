@@ -1,0 +1,9 @@
+version: '3'
+services:
+  face-detection-UI:
+    build: .
+    ports:
+    -  "5006:5006"
+    environment:
+      USERS_API: "http://localhost:5001"
+
