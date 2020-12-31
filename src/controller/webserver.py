@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from src.tools.image_upload import direct_image_upload
+from src.tools.db_operations import *
+import json
 
 webserver = Blueprint('webserver', __name__)
 
@@ -11,7 +13,20 @@ def index_page():
 
 @webserver.route('/add', methods=['GET'])
 def add_page():
-    return render_template('add.html')
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    elif int(page)<1:
+        page = 1
+    else:
+        page = int(page)
+    users = users_list(page)
+    for elem in users:
+        del elem["img"]
+    next_page = True
+    if len(users) == 0:
+        next_page = False
+    return render_template('add.html', registered_users=users, page=page, next_page=next_page)
 
 
 @webserver.route('/add', methods=['POST'])
@@ -31,6 +46,15 @@ def add_face():
         return "upload failed, is the upload service available?", 200
 
     return redirect(url_for('webserver.index_page'))
+
+
+@webserver.route('/delete/<int:id>', methods=['GET'])
+def delete_registered_user(id):
+    try:
+        delete_user(id)
+    except Exception as e:
+        return e, 200
+    return redirect(url_for('webserver.add_page'))
 
 
 @webserver.route('/login', methods=['POST'])
