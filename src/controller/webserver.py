@@ -80,10 +80,11 @@ def face_login():
     img_uri = request.json['imageString']
     if img_uri is not None:
         header, encoded = img_uri.split(",", 1)
-        result = face_login_request(encoded)
-        if result:
-            return "success", 200
-        else:
-            return "login failed", 401
+        try:
+            result = face_login_request(encoded)
+            return result["name"], 200
+        except Exception as e:
+            print(str(e))
+            return str(e), 401
     else:
-        return "Invalid credentials", 200
+        return "Invalid image", 401
