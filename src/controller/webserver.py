@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from src.tools.image_upload import direct_image_upload
 from src.tools.db_operations import *
+from src.tools.face_login import *
 import json
 
 webserver = Blueprint('webserver', __name__)
@@ -47,6 +48,9 @@ def add_face():
 
     return redirect(url_for('webserver.index_page'))
 
+@webserver.route('/face_login', methods=['GET'])
+def face_login_page():
+    return render_template('facelogin.html')
 
 @webserver.route('/delete/<int:id>', methods=['GET'])
 def delete_registered_user(id):
@@ -64,5 +68,22 @@ def login():
     """
     if request.form['id'] == "admin" and request.form['password'] == "admin":
         return redirect(url_for('webserver.add_page'))
+    else:
+        return "Invalid credentials", 200
+
+
+@webserver.route('/face-login', methods=['POST'])
+def face_login():
+    """
+        Mock method for login. Does not generate any token, only for demonstrative purpose.
+    """
+    img_uri = request.json['imageString']
+    if img_uri is not None:
+        header, encoded = img_uri.split(",", 1)
+        result = face_login_request(encoded)
+        if result:
+            return "success", 200
+        else:
+            return "login failed", 401
     else:
         return "Invalid credentials", 200
