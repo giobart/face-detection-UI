@@ -11,7 +11,7 @@ try:
 except Exception as e:
     print(e)
 
-setup(name='face-detection-ui',
+setup(name='face-detection-UI',
       version="0.1",
       packages=find_packages(),
       zip_safe=False,
