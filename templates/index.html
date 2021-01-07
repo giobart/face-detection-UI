@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="../static/style.css">
+
+    <title>Who's that pokemon</title>
+  </head>
+  <body>
+    <div class="container login-container">
+            <div class="row">
+                <div class="col-md-6 login-form-1">
+                    <h3>Register new face</h3>
+                        <form action="/login" method="POST">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="ID" id="id" name="id" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Password" id="password" name="password"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btnSubmit" value="Log In" />
+                            </div>
+                        </form>
+
+                </div>
+                <div class="col-md-6 login-form-2">
+                    <div class="login-logo">
+                        <img src="static/face-logo.png" alt=""/>
+                    </div>
+                    <h3>Login with face</h3>
+                        <a href="/face_login">
+                        <div class="login-image">
+                            <input type="image" value="Login" alt="Submit" src="static/face.png" />
+                        </div>
+                        </a>
+                </div>
+            </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  </body>
+</html>
