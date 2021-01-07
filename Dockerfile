@@ -9,5 +9,5 @@ RUN pip install -r requirements.txt
 
 EXPOSE 5006
 
-CMD ["gunicorn", "-c", "gunicorn_config.py", "entry:app"]
+CMD ["python", "entry.py"]
 
