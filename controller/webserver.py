@@ -78,10 +78,11 @@ def face_login():
         Mock method for login. Does not generate any token, only for demonstrative purpose.
     """
     img_uri = request.json['imageString']
+    img_crop = bool(request.json['img_crop'])
     if img_uri is not None:
         header, encoded = img_uri.split(",", 1)
         try:
-            result = face_login_request(encoded)
+            result = face_login_request(encoded,img_crop=img_crop)
             return result["name"], 200
         except Exception as e:
             print(str(e))
