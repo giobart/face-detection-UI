@@ -39,10 +39,34 @@
                         <div class="login-image" id="video-box">
                             <video id="video" width="100%" height="100%" autoplay></video>
                         </div>
+                        <div class="card bg-danger mb-3 text-center" id="blink">
+                            <div class="card-body">
+                              <h5 class="card-title">
+                                  <img class="bi" width="32" height="32" src="static/eye-close.png" alt=""/>
+                                  Blink now
+                                  <img class="bi" width="32" height="32" src="static/eye-close.png" alt=""/>
+                              </h5>
+                            </div>
+                        </div>
+                        <div class="card bg-danger mb-3 text-center" id="eye-open">
+                            <div class="card-body">
+                              <h5 class="">
+                                  <img class="bi" width="32" height="32" src="static/eye-open.png" alt=""/>
+                                  Eyes open
+                                  <img class="bi" width="32" height="32" src="static/eye-open.png" alt=""/>
+                              </h5>
+                            </div>
+                        </div>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" value="" id="face_crop">
                           <label class="form-check-label text-light" for="face_crop">
                               Face crop and align
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="liveness">
+                          <label class="form-check-label text-light" for="face_crop">
+                              Liveness Detection
                           </label>
                         </div>
                         <div class="form-check">
@@ -59,6 +83,36 @@
     <canvas id="canvas" class="d-none" width="100" height="100"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <script>
+
+        function login_request(imageString,face_crop_checkbox_value,liveness_checkbox_value,liveness_frames){
+            // send image to server
+            resp = fetch('/face-login', {
+                        method: "POST",
+                        cache: "no-cache",
+                        credentials: "same-origin",
+                        headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        imageString: imageString,
+                        img_crop:face_crop_checkbox_value,
+                        liveness:liveness_checkbox_value,
+                        frames:liveness_frames,
+                    }),
+            })
+
+            resp.then((value) => {
+                    if(value.status === 200){
+                        value.text().then(function (text) {
+                            alert("Login Succeded\nWelcome back "+ text);
+                        });
+                    }
+                    else{
+                        alert("Login Failed code:" + value.status)
+                    }
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function(){
 
             // Grab elements, create settings, etc.
@@ -82,6 +136,9 @@
             var context = canvas.getContext('2d');
             var video = document.getElementById('video');
 
+            $('#blink').hide()
+            $('#eye-open').hide()
+
             // Trigger photo take
             document.getElementById("snap").addEventListener("click", function() {
                 var canvas = document.getElementById('canvas');
@@ -99,32 +156,38 @@
                     face_crop_checkbox_value = true
                 }
 
-                // send image to server
-                resp = fetch('/face-login', {
-                        method: "POST",
-                        cache: "no-cache",
-                        credentials: "same-origin",
-                        headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        imageString: imageString,
-                        img_crop:face_crop_checkbox_value
-                    }),
-                 })
+                //check if liveness detection enabled and pick liveness frames
+                var liveness_detection_checkbox = false;
+                if (document.getElementById('liveness').checked) {
+                    liveness_detection_checkbox = true;
+                    var nframes=0;
+                    var frames = [];
+                    var intervalVar = setInterval(livenessFrameFunction, 200);
 
-                resp.then((value) => {
-                    if(value.status === 200){
-                        value.text().then(function (text) {
-                            alert("Login Succeded\nWelcome back "+ text);
-                        });
+                    function livenessFrameFunction() {
+                        if(nframes<6){
+                            $('#eye-open').show();
+                        }
+                        if(nframes>=6){
+                            $('#eye-open').hide();
+                            $('#blink').show();
+                        }
+                        context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
+                        frames.push(canvas.toDataURL());
+                        nframes++;
+                        if(nframes>=15){
+                            $('#eye-open').hide()
+                            $('#blink').hide()
+                            clearInterval(intervalVar);
+                            login_request(imageString,face_crop_checkbox_value,true,frames)
+                        }
                     }
-                    else{
-                        alert("Login Failed code:" + value.status)
-                    }
-                });
 
-
+                }
+                //otherwise use standard login
+                else{
+                    login_request(imageString,face_crop_checkbox_value,false,[])
+                }
             });
 
         });

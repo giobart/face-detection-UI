@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, redirect, url_fo
 from tools.image_upload import direct_image_upload
 from tools.db_operations import *
 from tools.face_login import *
+import traceback
 import json
 
 webserver = Blueprint('webserver', __name__)
@@ -17,7 +18,7 @@ def add_page():
     page = request.args.get('page')
     if page is None:
         page = 1
-    elif int(page)<1:
+    elif int(page) < 1:
         page = 1
     else:
         page = int(page)
@@ -48,9 +49,11 @@ def add_face():
 
     return redirect(url_for('webserver.index_page'))
 
+
 @webserver.route('/face_login', methods=['GET'])
 def face_login_page():
     return render_template('facelogin.html')
+
 
 @webserver.route('/delete/<int:id>', methods=['GET'])
 def delete_registered_user(id):
@@ -82,10 +85,14 @@ def face_login():
     if img_uri is not None:
         header, encoded = img_uri.split(",", 1)
         try:
-            result = face_login_request(encoded,img_crop=img_crop)
-            return result["name"]+" "+result["surname"], 200
+            liveness = False
+            frames = []
+            if 'liveness' in request.json:
+                frames = request.json['frames']
+            result = face_login_request(encoded, img_crop=img_crop, liveness=liveness, frames=frames)
+            return result["name"] + " " + result["surname"], 200
         except Exception as e:
-            print(str(e))
+            traceback.print_exc()
             return str(e), 401
     else:
         return "Invalid image", 401
