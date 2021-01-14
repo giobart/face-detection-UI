@@ -83,7 +83,7 @@ def face_login():
         header, encoded = img_uri.split(",", 1)
         try:
             result = face_login_request(encoded,img_crop=img_crop)
-            return result["name"], 200
+            return result["name"]+" "+result["surname"], 200
         except Exception as e:
             print(str(e))
             return str(e), 401

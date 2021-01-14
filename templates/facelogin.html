@@ -115,7 +115,9 @@
 
                 resp.then((value) => {
                     if(value.status === 200){
-                        alert("Login Succeded")
+                        value.text().then(function (text) {
+                            alert("Login Succeded\nWelcome back "+ text);
+                        });
                     }
                     else{
                         alert("Login Failed code:" + value.status)
