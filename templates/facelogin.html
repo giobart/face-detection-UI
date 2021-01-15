@@ -57,6 +57,13 @@
                               </h5>
                             </div>
                         </div>
+                        <div class="card bg-secondary mb-3 text-center" id="wait-card">
+                            <div class="card-body">
+                              <h5 class="">
+                                  Please wait...
+                              </h5>
+                            </div>
+                        </div>
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" value="" id="face_crop">
                           <label class="form-check-label text-light" for="face_crop">
@@ -85,6 +92,7 @@
     <script>
 
         function login_request(imageString,face_crop_checkbox_value,liveness_checkbox_value,liveness_frames){
+            $('#wait-card').show()
             // send image to server
             resp = fetch('/face-login', {
                         method: "POST",
@@ -102,13 +110,16 @@
             })
 
             resp.then((value) => {
+                    $('#wait-card').hide()
                     if(value.status === 200){
                         value.text().then(function (text) {
                             alert("Login Succeded\nWelcome back "+ text);
                         });
                     }
                     else{
-                        alert("Login Failed code:" + value.status)
+                        value.text().then(function (text) {
+                           alert("Login Failed "+ text)
+                        });
                     }
             });
         }
@@ -138,6 +149,7 @@
 
             $('#blink').hide()
             $('#eye-open').hide()
+            $('#wait-card').hide()
 
             // Trigger photo take
             document.getElementById("snap").addEventListener("click", function() {

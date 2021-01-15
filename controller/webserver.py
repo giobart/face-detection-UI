@@ -88,7 +88,10 @@ def face_login():
             liveness = False
             frames = []
             if 'liveness' in request.json:
-                frames = request.json['frames']
+                frames_uri = request.json['frames']
+                for frame in frames_uri:
+                    header, encoded_frame = frame.split(",", 1)
+                    frames.append(encoded_frame)
             result = face_login_request(encoded, img_crop=img_crop, liveness=liveness, frames=frames)
             return result["name"] + " " + result["surname"], 200
         except Exception as e:
