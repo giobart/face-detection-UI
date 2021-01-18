@@ -89,6 +89,7 @@ def face_login():
             frames = []
             if 'liveness' in request.json:
                 frames_uri = request.json['frames']
+                liveness = bool(request.json['liveness'])
                 for frame in frames_uri:
                     header, encoded_frame = frame.split(",", 1)
                     frames.append(encoded_frame)

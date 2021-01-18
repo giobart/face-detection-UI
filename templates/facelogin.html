@@ -76,7 +76,7 @@
                               Liveness Detection
                           </label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check" id="fraud_detection-form">
                           <input class="form-check-input" type="checkbox" value="" id="fraud_detection" disabled>
                           <label class="form-check-label text-light" for="fraud_detection">
                             Fraud Detection
@@ -150,6 +150,7 @@
             $('#blink').hide()
             $('#eye-open').hide()
             $('#wait-card').hide()
+            $('#fraud_detection-form').hide()
 
             // Trigger photo take
             document.getElementById("snap").addEventListener("click", function() {
@@ -171,7 +172,6 @@
                 //check if liveness detection enabled and pick liveness frames
                 var liveness_detection_checkbox = false;
                 if (document.getElementById('liveness').checked) {
-                    liveness_detection_checkbox = true;
                     var nframes=0;
                     var frames = [];
                     var intervalVar = setInterval(livenessFrameFunction, 200);
